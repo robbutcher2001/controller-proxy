@@ -8,8 +8,8 @@ export let username;
 export let password;
 
 try {
-  username = fs.readFileSync("/run/secrets/username", "utf8");
-  password = fs.readFileSync("/run/secrets/password", "utf8");
+  username = fs.readFileSync("/run/secrets/username", "utf8").toString().trim();
+  password = fs.readFileSync("/run/secrets/password", "utf8").toString().trim();
 } catch (error) {
   throw error;
 }

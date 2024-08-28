@@ -1,0 +1,17 @@
+services:
+  server:
+    build:
+      context: .
+    environment:
+      NODE_ENV: production
+    secrets:
+      - username
+      - password
+    ports:
+      - 8008:8008
+
+secrets:
+  username:
+    file: creds/username
+  password:
+    file: creds/password

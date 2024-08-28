@@ -1,8 +1,9 @@
 import fetch, { Headers } from "node-fetch";
 import https from "https";
+import { username, password } from "./config.js";
 
 const method = "POST";
-
+const authPath = "/api/auth/login";
 const headers = new Headers({
   "Content-Type": "application/json",
 });
@@ -11,16 +12,6 @@ const agent = new https.Agent({
   rejectUnauthorized: false,
 });
 
-const authPath = "/api/auth/login";
-
-// TODO: read in from docker
-const body = {
-  username: "<set>",
-  password: "<set>",
-  token: "",
-  rememberMe: false,
-};
-
 export default class Auth {
   #url;
   #attempts = 0;
@@ -28,8 +19,8 @@ export default class Auth {
   #token;
   #csrf;
 
-  constructor(server) {
-    this.#url = `${server}${authPath}`;
+  constructor(controller) {
+    this.#url = `${controller}${authPath}`;
   }
 
   login = async () => {
@@ -41,7 +32,10 @@ export default class Auth {
 
     const response = await fetch(this.#url, {
       method,
-      body: JSON.stringify(body),
+      body: JSON.stringify({
+        username,
+        password,
+      }),
       headers,
       agent,
     });
@@ -51,7 +45,6 @@ export default class Auth {
       ?.split(";")[0]
       ?.split("=")[1];
     this.#csrf = response.headers.get("x-csrf-token");
-    console.log("Logged in with", this.#token, this.#csrf);
   };
 
   getToken = () => this.#token;

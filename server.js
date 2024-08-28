@@ -1,11 +1,9 @@
 import express from "express";
+import { controller, port } from "./config.js";
 import ProtectApi from "./protect-api.js";
 
-const server = "https://192.168.1.1";
-const api = new ProtectApi(server);
-
+const api = new ProtectApi(controller);
 const app = express();
-const port = 3000;
 
 app.get("/preset/:id", async ({ params }, res, next) => {
   try {

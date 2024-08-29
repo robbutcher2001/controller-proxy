@@ -2,6 +2,7 @@ import fetch, { Headers } from "node-fetch";
 import https from "https";
 import { cameraId } from "./config.js";
 import Auth from "./auth.js";
+import CameraState from "./camera-state.js";
 
 const cameraPath = `/proxy/protect/api/cameras/${cameraId}`;
 const presetConfig = {
@@ -28,10 +29,12 @@ const agent = new https.Agent({
 export default class ProtectApi {
   #controller;
   #auth;
+  #state;
 
   constructor(controller) {
     this.#controller = controller;
     this.#auth = new Auth(controller);
+    this.#state = new CameraState();
   }
 
   #request = async (url, options, handler) => {
@@ -64,18 +67,29 @@ export default class ProtectApi {
 
   presetNavigate = (id) => {
     const { path, options } = presetConfig;
-    return this.#request(
+    const response = this.#request(
       `${this.#controller}${path}${id}`,
       options,
       (data) => data?.success
     );
+    this.#state.setPresetActive(id);
+
+    return response;
   };
 
-  autoTrack = () =>
-    this.#request(
+  autoTrack = () => {
+    const response = this.#request(
       `${this.#controller}${cameraPath}`,
       autoTrackingConfig.options,
       (data) =>
         Boolean(data?.smartDetectSettings?.autoTrackingObjectTypes?.length)
     );
+    this.#state.setAutoTrackActive();
+
+    return response;
+  };
+
+  getPresetState = (id) => this.#state.isPresetActive(id);
+
+  getAutoTrackState = () => this.#state.isAutoTrackActive();
 }

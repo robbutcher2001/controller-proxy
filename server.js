@@ -13,12 +13,20 @@ app.get("/preset/:id", async ({ params }, res, next) => {
   }
 });
 
+app.get("/preset/:id/state", ({ params }, res) => {
+  res.send(api.getPresetState(params.id));
+});
+
 app.get("/auto-track", async (_, res, next) => {
   try {
     res.send(await api.autoTrack());
   } catch (error) {
     return next(error);
   }
+});
+
+app.get("/auto-track/state", (_, res) => {
+  res.send(api.getAutoTrackState());
 });
 
 app.listen(port, () => {

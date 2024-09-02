@@ -26,10 +26,6 @@ export default class Auth {
   login = async () => {
     this.#attempts = this.#attempts + 1;
 
-    if (this.#attempts >= 3) {
-      throw new Error(`Unsuccessful login after [${this.#attempts}] attempts`);
-    }
-
     const response = await fetch(this.#url, {
       method,
       body: JSON.stringify({
@@ -40,11 +36,18 @@ export default class Auth {
       agent,
     });
 
-    this.#token = response.headers
-      .get("set-cookie")
-      ?.split(";")[0]
-      ?.split("=")[1];
-    this.#csrf = response.headers.get("x-csrf-token");
+    if (response.ok) {
+      this.#attempts = 0;
+      this.#token = response.headers
+        .get("set-cookie")
+        ?.split(";")[0]
+        ?.split("=")[1];
+      this.#csrf = response.headers.get("x-csrf-token");
+    }
+
+    if (this.#attempts >= 3) {
+      throw new Error(`Unsuccessful login after [${this.#attempts}] attempts`);
+    }
   };
 
   getToken = () => this.#token;

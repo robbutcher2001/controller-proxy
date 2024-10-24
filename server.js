@@ -1,6 +1,6 @@
 import express from "express";
-import { controller, port } from "./config.js";
-import ProtectApi from "./protect-api.js";
+import { controller, port } from "./src/config.js";
+import ProtectApi from "./src/protect-api.js";
 
 const api = new ProtectApi(controller);
 const app = express();

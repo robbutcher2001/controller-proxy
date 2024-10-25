@@ -1,15 +1,22 @@
+import EventEmitter from "./event-emitter.js";
+import Observable from "./observable.js";
+
 const AUTO_TRACK = "AUTO_TRACK";
 
 export default class CameraState {
-  #activeState;
+  #active;
+
+  constructor() {
+    this.#active = new Observable().build(this.#active, EventEmitter.publish);
+  }
 
   #format = (predicate) => (predicate ? "1" : "0");
 
-  setPresetActive = (id) => (this.#activeState = id);
+  setPresetActive = (id) => (this.#active.value = id);
 
-  setAutoTrackActive = () => (this.#activeState = AUTO_TRACK);
+  setAutoTrackActive = () => (this.#active.value = AUTO_TRACK);
 
-  isPresetActive = (id) => this.#format(this.#activeState === id);
+  isPresetActive = (id) => this.#format(this.#active.value === id);
 
-  isAutoTrackActive = () => this.#format(this.#activeState === AUTO_TRACK);
+  isAutoTrackActive = () => this.#format(this.#active.value === AUTO_TRACK);
 }

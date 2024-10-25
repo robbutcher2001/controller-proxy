@@ -1,7 +1,7 @@
 {
-  "name": "protect",
-  "version": "1.0.0",
-  "main": "protect.js",
+  "name": "controller-proxy",
+  "version": "1.1.0",
+  "main": "server.js",
   "type": "module",
   "scripts": {
     "start": "node server.js"
@@ -11,6 +11,7 @@
   "description": "",
   "dependencies": {
     "express": "^4.19.2",
+    "mqtt": "^5.10.1",
     "node-fetch": "^3.3.2"
   }
 }

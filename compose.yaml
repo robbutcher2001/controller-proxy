@@ -4,14 +4,26 @@ services:
       context: .
     environment:
       NODE_ENV: production
+      APP_CONTROLLER_URL: https://192.168.1.1
+      APP_CAMERA_ID: 66c7894000f99803e40129d4
+      APP_MQTT_BROKER: localhost
+      APP_MQTT_PORT: 1883
+      APP_MQTT_TOPIC: ptz_status
+      APP_MQTT_MSG_PREFIX: button_
     secrets:
-      - username
-      - password
+      - protect_username
+      - protect_password
+      - mqtt_username
+      - mqtt_password
     ports:
       - 8008:8008
 
 secrets:
-  username:
-    file: creds/username
-  password:
-    file: creds/password
+  protect_username:
+    file: creds/protect/username
+  protect_password:
+    file: creds/protect/password
+  mqtt_username:
+    file: creds/mqtt/username
+  mqtt_password:
+    file: creds/mqtt/password

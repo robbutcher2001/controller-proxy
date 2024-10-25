@@ -1,8 +1,8 @@
 import express from "express";
-import { controller, port } from "./src/config.js";
+import { CONTROLLER_URL, APP_PORT } from "./src/config.js";
 import ProtectApi from "./src/protect-api.js";
 
-const api = new ProtectApi(controller);
+const api = new ProtectApi(CONTROLLER_URL);
 const app = express();
 
 app.get("/preset/:id", async ({ params }, res, next) => {
@@ -29,6 +29,6 @@ app.get("/auto-track/state", (_, res) => {
   res.send(api.getAutoTrackState());
 });
 
-app.listen(port, () => {
-  console.log(`HomeKit Protect proxy running on port ${port}`);
+app.listen(APP_PORT, () => {
+  console.log(`HomeKit Protect proxy running on port ${APP_PORT}`);
 });

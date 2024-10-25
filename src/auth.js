@@ -1,6 +1,9 @@
 import fetch, { Headers } from "node-fetch";
 import https from "https";
-import { username, password } from "./config.js";
+import {
+  PROTECT_USERNAME as username,
+  PROTECT_PASSWORD as password,
+} from "./config.js";
 
 const method = "POST";
 const authPath = "/api/auth/login";

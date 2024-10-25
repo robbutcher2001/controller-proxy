@@ -1,10 +1,10 @@
 import fetch, { Headers } from "node-fetch";
 import https from "https";
-import { cameraId } from "./config.js";
+import { CAMERA_ID } from "./config.js";
 import Auth from "./auth.js";
 import CameraState from "./camera-state.js";
 
-const cameraPath = `/proxy/protect/api/cameras/${cameraId}`;
+const cameraPath = `/proxy/protect/api/cameras/${CAMERA_ID}`;
 const presetConfig = {
   path: `${cameraPath}/ptz/goto/`,
   options: {

@@ -23,6 +23,10 @@ export default class EventEmitter {
       username,
       password,
     });
+
+    this.#client.on("error", (err) => {
+      console.error(err);
+    });
   }
 
   static publish = (message) => {

@@ -6,7 +6,7 @@ services:
       NODE_ENV: production
       APP_CONTROLLER_URL: https://192.168.1.1
       APP_CAMERA_ID: 66c7894000f99803e40129d4
-      APP_MQTT_BROKER: localhost
+      APP_MQTT_BROKER: 192.168.1.250
       APP_MQTT_PORT: 1883
       APP_MQTT_TOPIC: ptz_status
       APP_MQTT_MSG_PREFIX: button_

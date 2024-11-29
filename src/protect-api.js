@@ -82,7 +82,7 @@ export default class ProtectApi {
 
     this.#state.setPresetActive(id);
 
-    return presetOn && autoTrackOff;
+    return autoTrackOff && presetOn;
   };
 
   autoTrack = async () => {

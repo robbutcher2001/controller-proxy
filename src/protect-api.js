@@ -11,16 +11,18 @@ const presetConfig = {
     method: "POST",
   },
 };
-const autoTrackingConfig = {
+const autoTrackingConfig = ({ switchOn }) => ({
   options: {
     method: "PATCH",
     body: JSON.stringify({
       smartDetectSettings: {
-        autoTrackingObjectTypes: ["person"],
+        autoTrackingObjectTypes: switchOn ? ["person"] : [],
       },
     }),
   },
-};
+});
+const autoTrackingOnConfig = autoTrackingConfig({ switchOn: true });
+const autoTrackingOffConfig = autoTrackingConfig({ switchOn: false });
 
 const agent = new https.Agent({
   rejectUnauthorized: false,
@@ -65,28 +67,34 @@ export default class ProtectApi {
     return handler(await response.json());
   };
 
-  presetNavigate = (id) => {
-    const { path, options } = presetConfig;
-    const response = this.#request(
-      `${this.#controller}${path}${id}`,
-      options,
-      (data) => data?.success
+  presetNavigate = async (id) => {
+    const autoTrackOff = await this.#request(
+      `${this.#controller}${cameraPath}`,
+      autoTrackingOffConfig.options,
+      (data) => data?.smartDetectSettings?.autoTrackingObjectTypes?.length === 0
     );
+
+    const presetOn = await this.#request(
+      `${this.#controller}${presetConfig.path}${id}`,
+      presetConfig.options,
+      (data) => Boolean(data?.success)
+    );
+
     this.#state.setPresetActive(id);
 
-    return response;
+    return autoTrackOff && presetOn;
   };
 
-  autoTrack = () => {
-    const response = this.#request(
+  autoTrack = async () => {
+    const autoTrackOn = await this.#request(
       `${this.#controller}${cameraPath}`,
-      autoTrackingConfig.options,
-      (data) =>
-        Boolean(data?.smartDetectSettings?.autoTrackingObjectTypes?.length)
+      autoTrackingOnConfig.options,
+      (data) => data?.smartDetectSettings?.autoTrackingObjectTypes?.length > 0
     );
+
     this.#state.setAutoTrackActive();
 
-    return response;
+    return autoTrackOn;
   };
 
   getPresetState = (id) => this.#state.isPresetActive(id);

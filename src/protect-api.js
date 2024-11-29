@@ -71,10 +71,7 @@ export default class ProtectApi {
     const autoTrackOff = await this.#request(
       `${this.#controller}${cameraPath}`,
       autoTrackingOffConfig.options,
-      (data) =>
-        Boolean(
-          data?.smartDetectSettings?.autoTrackingObjectTypes?.length === 0
-        )
+      (data) => data?.smartDetectSettings?.autoTrackingObjectTypes?.length === 0
     );
 
     const presetOn = await this.#request(
@@ -92,8 +89,7 @@ export default class ProtectApi {
     const autoTrackOn = await this.#request(
       `${this.#controller}${cameraPath}`,
       autoTrackingOnConfig.options,
-      (data) =>
-        Boolean(data?.smartDetectSettings?.autoTrackingObjectTypes?.length > 0)
+      (data) => data?.smartDetectSettings?.autoTrackingObjectTypes?.length > 0
     );
 
     this.#state.setAutoTrackActive();
